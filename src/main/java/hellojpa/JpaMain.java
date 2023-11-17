@@ -22,13 +22,14 @@ public class JpaMain {
             member.setName("HelloA");
 
             // 객체를 영속성 컨텍스트에 저장한 상태 (영속 상태)
+            System.out.println("====== Before ======");
             entityManager.persist(member);
+            System.out.println("====== After ======");
 
-            Member findMember = entityManager.find(Member.class, 1L); // 조회
+            Member findMember = entityManager.find(Member.class, 2L); // 조회
 
-            findMember.setName("HelloJPA"); // 수정 - 트렌젝션을 commit하는 시점에 변경됨
-
-            entityManager.remove(findMember); // 삭제
+            System.out.println("findMember.id = " + findMember.getId());
+            System.out.println("findMember.name = " + findMember.getName());
 
             entityTransaction.commit();  // 이 때 DB에 쿼리가 날라감 (영속성 컨텍스트에 있는 애가 DB에 저장됨)
         } catch (Exception e) {
