@@ -16,22 +16,12 @@ public class JpaMain {
         entityTransaction.begin();
 
         try {
-            // 객체를 생성한 상태 (비영속 상태)
-            Member member = new Member();
-            member.setId(2L);
-            member.setName("HelloA");
+            Member findMember1 = entityManager.find(Member.class, 2L); // DB에서 조회
+            Member findMember2 = entityManager.find(Member.class, 2L); // 1차 캐시에서 조회
 
-            // 객체를 영속성 컨텍스트에 저장한 상태 (영속 상태)
-            System.out.println("====== Before ======");
-            entityManager.persist(member);
-            System.out.println("====== After ======");
+            System.out.println("result = " + (findMember1 == findMember2));
 
-            Member findMember = entityManager.find(Member.class, 2L); // 조회
-
-            System.out.println("findMember.id = " + findMember.getId());
-            System.out.println("findMember.name = " + findMember.getName());
-
-            entityTransaction.commit();  // 이 때 DB에 쿼리가 날라감 (영속성 컨텍스트에 있는 애가 DB에 저장됨)
+            entityTransaction.commit();
         } catch (Exception e) {
             entityTransaction.rollback();
         } finally {
