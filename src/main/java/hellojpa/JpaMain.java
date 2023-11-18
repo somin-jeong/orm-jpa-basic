@@ -17,18 +17,13 @@ public class JpaMain {
         //엔티티 매니저는 데이터 변경시 트랜잭션을 시작해야 한다.
 
         try {
-            // 영속
-            Member member1 = new Member(200L, "A");
-            Member member2 = new Member(190L, "C");
+            // 영속 엔티티 조회
+            Member findMember = entityManager.find(Member.class, 150L);
 
-            entityManager.persist(member1);
-            entityManager.persist(member2);
-            //여기까지 INSERT SQL을 데이터베이스에 보내지 않는다.
-
-            System.out.println("======================");
+            // 영속 엔티티 데이터 수정
+            findMember.setName("zzzzzzz");
 
             entityTransaction.commit(); // [트랜잭션] 커밋
-            //커밋하는 순간 데이터베이스에 INSERT SQL을 보낸다.
         } catch (Exception e) {
             entityTransaction.rollback();
         } finally {
