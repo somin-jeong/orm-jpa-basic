@@ -17,16 +17,14 @@ public class JpaMain {
         //엔티티 매니저는 데이터 변경시 트랜잭션을 시작해야 한다.
 
         try {
-            // 영속 엔티티 조회
-            Member findMember = entityManager.find(Member.class, 150L);
-            // 영속 엔티티 데이터 수정
-            findMember.setName("AAAAA");
-            // 준영속 상태로 분리, 영속성 컨텍스트에서 관리 안함
-            entityManager.detach(findMember);
+            Member member = new Member();
+            member.setId(1L);
+            member.setUsername("A");
+            member.setRoleType(RoleType.USER);
 
-            System.out.println("===============");
+            entityManager.persist(member);
+
             entityTransaction.commit(); // [트랜잭션] 커밋
-            // update 쿼리 안나감
         } catch (Exception e) {
             entityTransaction.rollback();
         } finally {
