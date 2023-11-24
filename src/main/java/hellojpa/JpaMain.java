@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -27,15 +28,19 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("Member1");
+            member.setTeam(team);
             entityManager.persist(member);
+
+            entityManager.flush();
+            entityManager.clear();
 
             //조회
             Member findMember = entityManager.find(Member.class, member.getId()); // jpa가 member와 team을 join해 한번에 다 가져옴
+            List<Member> members = findMember.getTeam().getMembers();
 
-            Team findTeam = findMember.getTeam();
-
-            Team newTeam = entityManager.find(Team.class, 2L);
-            findMember.setTeam(newTeam);
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());
+            }
 
             entityTransaction.commit(); // [트랜잭션] 커밋
         } catch (Exception e) {
